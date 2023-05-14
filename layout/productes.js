@@ -43,18 +43,19 @@ crossOrigin="anonymous">
 </script>
   <div className="w-100 row mt-3">
 <div className="col-12 col-lg-6 rtl row">
-    <h5 className="dropdown-toggle col-12 " onClick={ond1}>طريقة استخدام أبل باي</h5>
+    <h5 className="dropdown-toggle col-12 " onClick={ond1}> ماهي الخدمة التي يقدمها ألو؟</h5>
     <hr/>
-    <p className={`cp ${d1}`}>تحديد الطلبات داخل التطبيق وطريقة الدفع المناسبة، حيث تظهر كافة تحتوي على مجموعة من الطرق يتم اختيار الدفع إلكتروني من خلال ابل باي للاستفادة من الخصم المتاح داخل ألو</p>
-    <h5 className="dropdown-toggle col-12 "onClick={ond2}>حذف البطاقة الإتمانية</h5>
+    <p className={`cp ${d1}`}>خدمة التوصيل من مطاعم وكوفيهات ومحلات الحلويات والصيدليات إلى موقعك
+</p>
+    <h5 className="dropdown-toggle col-12 "onClick={ond2}>كيف اسجل للاستفادة من خدمات ألو؟</h5>
     <hr/>
-    <p className={`cp ${d2}`}> تحديد البطاقة ثم الضغط على الاختيارت وحذف البطاقة</p>
-    <h5 className="dropdown-toggle col-12 "onClick={ond3}>شحن المحفظة </h5>
+    <p className={`cp ${d2}`}> بتحمل التطبيق aloo عبر ابل ستور للايفون أو قوقل بلاي للاندرويد ، وبعد ذلك ادخال رقم الجوال والحصول على كود التحقق و يتم الاطلاع على  الخدمات والعروض المقدمه.</p>
+    <h5 className="dropdown-toggle col-12 "onClick={ond3}>هل أقدر  اسجل مع ألو كمندوب توصيل؟ </h5>
     <hr/>
-    <p className={`cp ${d3}`}> تدخل على المحفظة وتختار الباقة التي تود شرائها ثم تستكمل إجراءات الدفع</p>
-    <h5 className="dropdown-toggle col-12 "onClick={ond4}>نسيان الرقم السري</h5>
+    <p className={`cp ${d3}`}> نعم  يستطيع الجميع تقديم طلب تسجيل كمندوب توصيل لمن لديه هويه وطنيه او اقامة  ورخصة سير ساريه المفعول ،  والتقديم يكون من خلال الموقع الالكتروني ، او المراسله  عبر الواتساب 966551008805</p>
+    <h5 className="dropdown-toggle col-12 "onClick={ond4}>هل أقدر اسجل مع ألو كمتجر؟</h5>
     <hr/>
-    <p className={`cp ${d4}`}>الضغط على خيار نسيان الرقم السري ثم  تدخل رقم الجوال  ثم تصلك رسالة  تدخلها  بعد تستطيع تغير الرقم السري</p>
+    <p className={`cp ${d4}`}>نعم  يستطيع الجميع تقديم طلب تسجيل كمتجر لمن لديه سجل تجاري ساري المفعول ، من خلال الموقع الالكتروني ، او عبر الواتساب 966551008805 أو الايميل info@aloo.com.sa</p>
 </div>
 <form className="rtl col-12 col-lg-6" onSubmit={onsend}>
   <div class="form-row ">
