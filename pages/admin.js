@@ -24,13 +24,13 @@ export const getStaticProps =async()=>{
     const codelist = collection(db, 'category');
     const codesnapshot = await getDocs(codelist);
     const catolist = codesnapshot.docs?codesnapshot.docs.map(doc =>{ de.push(doc.data());   }):de
-    const prodlist = collection(db, 'broductes');
+    const prodlist = collection(db, 'rests');
     const prodsnapshot = await getDocs(prodlist);
     const products =()=> prodsnapshot.docs?prodsnapshot.docs.map(doc =>{ pro.push(doc.data());   }):[]
-    const ordlist = collection(db, 'orders'); 
+    const ordlist = collection(db, 'sales'); 
     const ordsnapshot = await getDocs(ordlist);
     const orderget =async()=>await ordsnapshot.docs?ordsnapshot.docs.map(doc =>or.push(doc.data()))   :[]
-    const opnion = collection(db, 'opnion');
+    const opnion = collection(db, 'msgs');
     const opnionsnap = await getDocs(opnion);
     const getopnion =async()=>await opnionsnap?opnionsnap.docs.map(doc =>{opnionarr.push(doc.data());   }):[];
     products()
@@ -112,9 +112,19 @@ const Admin = ({getdata}) => {
      }
      const delorders=async(id)=>{
       alert(`هل تريد مسح`)
-      await deleteDoc(doc(db, "orders", id))
+      await deleteDoc(doc(db, "sales", id))
       setorderss(orderss.filter(item => item.tele!=id))        
    }
+   const delrests=async(id)=>{
+    alert(`هل تريد مسح`)
+    await deleteDoc(doc(db, "rests", id))
+    setorderss(productes.filter(item => item.tele!=id))        
+ }
+ const delopnion=async(id)=>{
+  alert(`هل تريد مسح`)
+  await deleteDoc(doc(db, "msgs", id))
+  setorderss(opnions.filter(item => item.tele!=id))        
+}
  
      //  ---------------------------------------------------------------------------------------------------add category----------------
   const oncategory = (e) => setcategoryitem(e.target.value)
@@ -334,66 +344,23 @@ const onpartn = (e) => {
     }      
   }
 //   ------------------------------------------------------------------------------------------------------------------------------------add opion------------------
-const opntitle = (e) => setopnion({...opnion,name:e.target.value})
-const opnmsg = (e) => setopnion({...opnion,msg:e.target.value})
-const opnimg  = (e) => {if(imagesitem.length<1){
-    const fileopn = e.target.files[0];
-    if(fileopn){    
-    const storage = getStorage();
-    const storageRef = ref(storage, fileopn.name);
-    const uploadTask = uploadBytesResumable(storageRef, fileopn);
 
-    uploadTask.on('state_changed', 
-    (snapshot) => {
-      const progressopn = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      setProgressopn(progressopn)
-      console.log('Upload is ' + progressopn + '% done');          
-    }, 
-    (error) => {
-    }, 
-    () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        setProgressopn(0);
-
-        setopnitem([downloadURL])
-        setopnion({...opnion, img:downloadURL})
-        });
-    }
-  );}else{alert("أقصى عدد للصور صورة واحدة")}
-  };}
-  const addopnion=async(e)=>{
-      e.preventDefault()
-    const opnionarr=[]
-    const docRef = await setDoc(doc(db, "opnion", opnion.name),opnion);
-    setopnion({name:"",msg:"",img:""})
-    const opniondoc = collection(db, 'opnion');
-    const opnionsnap = await getDocs(opniondoc);
-    const  getopnion =opnionsnap.docs.map(doc =>doc.data())        
-    setopnions(getopnion)
-    setopnitem([])
-    
-  }
-  const delopn=async(id)=>{
-      if(partener.length<4){
-    alert(`هل تريد مسح`)
-    await deleteDoc(doc(db, "opnion", id))
-    const opniondoc = collection(db, 'opnion');
-    const opnionsnap = await getDocs(opniondoc);
-    const  getopnion =opnionsnap.docs.map(doc =>doc.data())
-    setopnions(getopnion)
-     }}
-  
      //------------------------------------------------------------------------------------------------------------------   
 
 
 return ( 
   <AuthRoute>
-        <div className="my-5 container">
-        <Head>
+    <div className="my-5 container">
+    <Head>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
-<title>مصنع فرسان الإنشاءات  للصناعة</title>
+<title>تطبيق ألو صفحة الأدمن</title>
    <link rel="icon" href="wew.png" type="image/x-icon" />
         </Head>
+        <div className="text-center d-block d-lg-none">
+          <h2> لن يتم عرض الصفحة على الجوال </h2>
+        </div>
+        <div className="my-5 container d-none d-lg-block">
+
 <div className="row w-100">
     <h4 className="col-12 col-lg-3 title ms-auto">لوحة التحكم</h4>
 </div>
@@ -403,16 +370,16 @@ crossOrigin="anonymous">
 </script>
 <ul className="nav nav-tabs" id="myTab" role="tablist">
   <li className="nav-item" role="presentation">
-    <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">طلبات الشراء</button>
+    <button className="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">طلبات المناديب</button>
   </li>
   <li className="nav-item" role="presentation">
-    <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">المنتجات</button>
+    <button className="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">طلبات المطاعم </button>
   </li>
   <li className="nav-item" role="presentation">
     <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">إضافة الأقسام</button>
   </li>
   <li className="nav-item" role="presentation">
-    <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contac" type="button" role="tab" aria-controls="contact" aria-selected="false">إضافة منتج</button>
+    <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contac" type="button" role="tab" aria-controls="contact" aria-selected="false">استفسارات العملاء</button>
   </li>
   <li className="nav-item" role="presentation">
     <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#conta" type="button" role="tab" aria-controls="contact" aria-selected="false">تعديل معلومات الصفحة</button>
@@ -421,47 +388,23 @@ crossOrigin="anonymous">
     <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#cont" type="button" role="tab" aria-controls="contact" aria-selected="false">صور الغلاف</button>
   </li>
   <li className="nav-item" role="presentation">
-    <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#con" type="button" role="tab" aria-controls="contact" aria-selected="false">الآراء وشركاء النجاح</button>
+    <button className="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#con" type="button" role="tab" aria-controls="contact" aria-selected="false"> شعارات المطاعم</button>
   </li>
 </ul>
 <div className="tab-content" id="myTabContent">
   <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-  <div className="col-12 row">
-        <button onClick={()=> cator("deleted")} className="btn col-3 btn-danger">deleted</button>
-        <button onClick={()=> cator("holding")} className="btn col-3 btn-warning">holding</button>
-        <button onClick={()=> cator("shipping")} className="btn col-3 btn-info">shipping</button>
-        <button onClick={()=> cator("finishing")} className="btn col-3 btn-success">finshed</button>
-        </div>
+ 
      {
   orderss.map((item) => (
-   <div className=" m-1 p-1 rounded-2 border row" key={item.tele}>
-         <h6  className="  col-6 rounded-2 text-end text-dark"> <span className="border rounded-2 bg-danger   text-light" >رقم الطلب:</span> {item.tele}</h6>
-         <h6  className="  col-6 rounded-2 text-end text-dark"> <span className="border rounded-2 bg-danger   text-light" >اسم العميل:</span>  {item.name}</h6>
-         <h6  className="  col-6 rounded-2 text-end text-dark"> <span className="border rounded-2 bg-danger   text-light" >رقم الموبايل:</span>  {item.tele}</h6>
-         <h6  className="  col-6 rounded-2 text-end text-dark"> <span className="border rounded-2 bg-danger   text-light" >العنوان:</span>  {item.adress}</h6>
-         <h6  className="  col-6 rounded-2 text-end text-dark"> <span className="border rounded-2 bg-danger   text-light" >برموكود:</span> {item.promo}</h6>
-         <h6  className="  col-6 rounded-2 text-end text-dark"> <span className="border rounded-2 bg-danger   text-light" >التاريخ:</span>  {item.data}</h6>
-         <h6  className="  col-6 rounded-2 text-end text-dark"> <span className="border rounded-2 bg-danger   text-light" >الايميل:</span> {item.email}</h6>
-         <h6  className="  col-6 rounded-2 text-end text-dark"> <span className="border rounded-2 bg-danger   text-light" >السعر:</span> {item.price}</h6>
-        <div className="  col-12 row rounded-2 m-auto "> 
-        {item.mycart.map((it)=>(<div className="  col-3 rounded-2 row text-end m-1 text-dark p-2 border " key={it.code}>
-          <img className="border rounded col-4" src={it.img} width={`100px`} height={`100px`}  alt="" />
-          <div  className="col-8 "> 
-          <p className="m-0 p-0">{`${it.title}`}</p>
-          <p className="m-0 p-0">{`الكود:${it.code}`}</p>
-          <p className="m-0 p-0">{`الكمية:${it.count}`}</p>
-          <p className="m-0 p-0">{`سعر:${it.price}`}</p>
-          </div>
-        </div>))}
-
-        </div>
-        <div className="col-12 row">
-        <button onClick={()=>oond(item.tele,item)} className="btn col-2 m-1 btn-danger">delet</button>
-        <button onClick={()=>oonh(item.tele,item)} className="btn col-2 m-1 btn-warning">hold</button>
-        <button onClick={()=>oons(item.tele,item)} className="btn col-2 m-1 btn-info">shipping</button>
-        <button onClick={()=>oonf(item.tele,item)} className="btn col-2 m-1 btn-success">finshed</button>
-        </div>
-       </div>
+  <div className="w-100 row p-1 border border-info mb-2 " key={item.id}>
+    <p className="col-6 p-1 border border-danger mb-1 text-end "> الاسم:{item.name}</p>
+    <p className="col-6 p-1 border border-danger mb-1 text-end ">رقم:{item.id}</p>
+    <p className="col-6 p-1 border border-danger mb-1 text-end ">رقم الجوال:{item.tele}</p>
+    <p className="col-6 p-1 border border-danger mb-1 text-end ">:رقم الهوية{item.nation}</p>
+    <p className="col-6 p-1 border border-danger mb-1 text-end ">:تاريخ الميلاد{item.birth}</p>
+    <p className="col-6 p-1 border border-danger mb-1 text-end ">تاريخ انتهاءالهوية:{item.expire}</p>
+    <button type="button" class="btn btn-danger" onClick={(x)=>delorders(item.tele)}>مسح</button>
+  </div>
 
     
             ))} 
@@ -469,49 +412,19 @@ crossOrigin="anonymous">
 
 </div>
   <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-  <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"><table className="table">
-  <thead>
-    
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">اسم المنتج</th>
-      <th scope="col">القسم</th>
-      <th scope="col">السعر</th>
-      <th scope="col">العرض</th>
-       <th scope="col">تعديل</th>
-       <th scope="col">مسح</th>
-    </tr>
-    
-  </thead>
-  <tbody>
   {
   productes.map((item) => (
-    <tr  key={item.code}>
-    <th className="text-info" scope="row">{item.code}</th>
-    <td className="text-success">{item.title}</td>
-    <td>
-    {item.category}
-    </td>
-    <td>
-    {item.price}
-    </td>
-    <td>
-    {item.offer}
-    </td>
-    <td>
-        <button className="btn btn-info">تعديل</button>
-    </td>
-    <td>
-        <button className="btn btn-danger" onClick={(x)=>delproduct(item.code,item.title)}>مسح</button>
-    </td>
-  </tr>
+  <div className="w-100 row p-1 border border-info mb-2 " key={item.id}>
+    <p className="col-6 p-1 border border-danger mb-1 text-end "> اسم المطعم:{item.name}</p>
+    <p className="col-6 p-1 border border-danger mb-1 text-end ">اسم الشخص المسؤول:{item.man}</p>
+    <p className="col-6 p-1 border border-danger mb-1 text-end ">رقم الجوال:{item.tele}</p>
+    <p className="col-6 p-1 border border-danger mb-1 text-end ">:نوع المطعم{item.kind}</p>
+ 
+    <button type="button" class="btn btn-danger" onClick={(x)=>delrests(item.tele)}>مسح</button>
+  </div>
 
     
-            ))}
-   
-  </tbody>
-</table>
-  </div>
+            ))} 
   </div>
   <div className="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
    <div className="input-group input-group-lg my-3">
@@ -530,89 +443,17 @@ crossOrigin="anonymous">
 </ul>
   </div>
   <div className="tab-pane fade" id="contac" role="tabpanel" aria-labelledby="contact-tab">
-   <form onSubmit={addproduct}> 
-  <div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={onprcode}value={product.code} required />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">code</span>
-</div>
-<div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={onprtitle} value={product.title} required />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">اسم المنتج</span>
-</div>
-<div className=" mb-3 w-75 ms-auto required">
-<label htmlFor="htmlFormFileLg" className="form-label text-right text-primary">رفع صور</label>
-   <input className="form-control form-control-lg bg-primary text-light" id="htmlFormFileLg" type="file" ref={inputRef} onChange={uploadImage} />
-   </div>
-   <div className="progress mb-3 w-75">
-  <div className="progress-bar" role="progressbar" style={{width:` ${progress}%`}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{progress}</div>
-</div>
-        <div className="photo-grid  mb-3 w-75 ms-auto">
-          {
-            imagesitem.map((image) => (
-              <img className="col-2" src={image} alt="" key={image} />
-            ))}
-        </div>
-        <select className="mb-3 w-75 ms-auto bg=primary" aria-label="Default select example" value={product.category}  onChange={onprcat} required>
-  <option selected>اختار القسم</option>{
-  category.map((item) => (
-    <option value={item.name}>{item.name}</option>
-            ))}
-  </select>
-  <div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={onprice} value={product.price} required />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">سعر المنتج</span>
-</div>
-<div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={onoffer} value={product.offer}  />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">نسبة الخصم</span>
-</div>
-<div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={onwidth} value={product.width} required />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">أبعاد: عرض</span>
-</div>
-<div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={onheight} value={product.height} required />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">أبعاد: طول</span>
-</div>
-<div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={onweight} value={product.weight} required />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">أبعاد:وزن</span>
-</div>
-<div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={onavailable} value={product.available}  />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">العدد</span>
-</div>
-<div className="form-check">
-  <input className="form-check-input" type="checkbox" value="yes" id="flexCheckDefault" onChange={onorclient}/>
-  <label className="form-check-label" for="flexCheckDefault">
-  طلب على حسب العميل
-  </label>
-</div>
-  <div className="form-check">
-  <input className="form-check-input" type="checkbox" value="yes" id="flexCheckDefault" onChange={onfav}/>
-  <label className="form-check-label" for="flexCheckDefault">
-    تفضيل
-  </label>
-</div>
-<div className="input-group  mb-3 w-75 ms-auto">
-  <textarea className="form-control" aria-label="With textarea"onChange={onprdes} required value={product.des}></textarea>
-  <span className="input-group-text bg-primary text-light">وصف المنتج</span>
-</div>
+ { opnions.map((item) => (
+  <div className="w-100 row p-1 border border-info mb-2 " key={item.id}>
+    <p className="col-6 p-1 border border-danger mb-1 text-end "> اسم الشخص:{item.name}</p>
+    <p className="col-6 p-1 border border-danger mb-1 text-end ">رقم الجوال:{item.tele}</p>
+    <p className="col-12 p-1 border border-danger mb-1 text-end ">الرسالة:{item.man}</p>
+ 
+    <button type="button" class="btn btn-danger" onClick={(x)=>delopnion(item.tele)}>مسح</button>
+  </div>
 
-<div className="input-group  mb-3 w-75 ms-auto">
-  <textarea className="form-control" aria-label="With textarea"onChange={onprkey}value={product.key}></textarea>
-  <span className="input-group-text bg-primary text-light">الكلمات المفتاحية</span>
-</div>
-<div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={ontag} value={product.tag} required />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">تاج</span>
-</div>
-<div className="input-group input-group-lg border-success my-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"onChange={onshipping} value={product.shipping} required />
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">مصاريف الشحن</span>
-</div>
-<input type="submit" className="btn btn-success my-3" value="إضافة المنتج"/>
-</form>  
+    
+            ))} 
   </div>
   <div className="tab-pane fade" id="conta" role="tabpanel" aria-labelledby="contact-tab">
       <form action="" onSubmit={addinfo}>
@@ -743,51 +584,11 @@ crossOrigin="anonymous">
         <div className="photo-grid  mb-3 w-75 ms-auto">
         </div>
         <button type="button" className="btn btn-primary" onClick={addpartn}>رفع لوجو شركاء</button>
-   <div className="row my-3 justify-content-md-center gap">
-           {
-            opnions.map((op) => (
-                <div className="col-12 col-lg-3 p-2 border border-success  rounded" key={op.name}>
-                <p className="font-weight-bold text-center p-2">{op.msg}</p>
-              <div className="row hop">
-               <h6  className="col-8 p-2  text-primary">
-                 {op.name}
-               </h6>
-               <Image className="col-3 p-3 rounded-circle"   loader={() => op.img} src={op.img}   width={"100px"}
-      height={"100px"}/>
-                    </div>
-                    <button type="button" className="btn btn-danger" onClick={(x)=>{delopn(op.name)}}>مسح الرأي</button>
-               </div>
-               
-       
-            ))}     
-                  </div>
-     <form action="" onSubmit={addopnion}>            
-                  <div className="input-group input-group-lg border-success mb-3 w-75 ms-auto required">
-  <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required onChange={opntitle} value={opnion.name}/>
-  <span className="input-group-text bg-primary text-light " id="inputGroup-sizing-sm">الاسم</span>
-</div>
-<div className="input-group  mb-3 w-75 ms-auto">
-  <textarea className="form-control" aria-label="With textarea" onChange={opnmsg} required value={opnion.msg}></textarea>
-  <span className="input-group-text bg-primary text-light">اكتب رسالتك</span>
-</div>
-<div className=" mb-3 w-75 ms-auto required">
-<label htmlFor="htmlFormFileLg" className="form-label text-right text-primary">رفع صورة</label>
-   <input className="form-control form-control-lg  text-light" id="htmlFormFileLg" type="file" onChange={opnimg} required/>
-   </div>
-   <div className="progress mb-3 w-75">
-  <div className="progress-bar" role="progressbar" style={{width:` ${progressopn}%`}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{progressopn}</div>
-</div>
-        <div className="photo-grid  mb-3 w-75 ms-auto">
-          {
-            opnitem.map((image) => (
-              <img className="col-2" src={image} alt="" key={image} />
-            ))}
-        </div>
-        <input type="submit" className="btn btn-success my-3" value="إضافة الرأي" onSubmit={addopnion} />
-        </form> 
+ 
 
  </div>
   </div>
+</div>
 </div>
 </div>
 </AuthRoute>

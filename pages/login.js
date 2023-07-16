@@ -7,7 +7,7 @@ const Login = () => {
     const [mail, setmail] = useState("");
     const [pass, setpass] = useState("");
     const [error, setError] = useState('');
-    const router = useRouter()
+    const router = useRouter('https://aloocome11.vercel.app')
        const handlename = (e) => {
       setmail(e.target.value);
       setError('');
